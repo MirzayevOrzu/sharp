@@ -10,8 +10,19 @@ app.get('/', (req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
 
-    await sharp(req.file.buffer, { animated: true }).toFile(`./outputs/sample.webp`)
-
+    sharp({
+        create: {
+            width: 200,
+            height: 200,
+            channels: 2,
+            noise: {
+                type: 'gaussian',
+                mean: 256, 
+                sigma: 120
+            }
+        }
+    }).toFile('./outputs/noise.png')
+    
     res.send('ok')
 })
 
