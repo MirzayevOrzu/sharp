@@ -10,18 +10,8 @@ app.get('/', (req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
 
-    sharp({
-        create: {
-            width: 200,
-            height: 200,
-            channels: 2,
-            noise: {
-                type: 'gaussian',
-                mean: 256, 
-                sigma: 120
-            }
-        }
-    }).toFile('./outputs/noise.png')
+    const metadata = await sharp(req.file.buffer).metadata()
+    console.log(metadata)
     
     res.send('ok')
 })
