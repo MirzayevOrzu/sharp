@@ -10,9 +10,16 @@ app.get('/', (req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
 
-    const metadata = await sharp(req.file.buffer).metadata()
-    console.log(metadata)
-    
+    const image = await sharp(req.file.buffer, { animated: true })
+    image
+        .metadata()
+        .then(metadata => {
+            return image
+                .resize(Math.round(metadata.width / 2))
+                .webp()
+                .toFile('./outputs/sample.webp')
+        })
+
     res.send('ok')
 })
 
